@@ -64,7 +64,10 @@
             <!-- -->
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="10"></RowDefinition>
-
+            
+            
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
             <!-- Progress Bar i  -->
             
             <RowDefinition Height="*"></RowDefinition>
@@ -104,7 +107,14 @@
             <TextBlock x:Name="VideoLocalization" HorizontalAlignment="Left"  Text="" VerticalAlignment="Center" Width="300" Background="#FF565454" FontSize="16"/>
             <Button Content="Change" Background="#FFCE2B2B" Click="ChangeButton"></Button>
         </StackPanel>
-        
+
+        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <TextBlock x:Name="PercentProgressBar" Text="0%" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFFD0000"></TextBlock>
+            <ProgressBar Minimum="0" Maximum="100" x:Name="progressBar" Width="500" Height="15"  Background="#FF565454" BorderBrush="#FF565454" Foreground="#FFB00606" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        </StackPanel>
+
 
     </Grid>
 </Window>

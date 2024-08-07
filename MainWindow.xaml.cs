@@ -5,15 +5,14 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-
 using YoutubeExplode;
 using YoutubeExplode.Converter;
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using YoutubeExplode.Common;
-using Xabe.FFmpeg;
 using YoutubeExplode.Videos.Streams;
+
 
 namespace YoutubeDownloader
 {
@@ -44,6 +43,8 @@ namespace YoutubeDownloader
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            UpdateProgressBar(0);
+
             MessageBox.Show("Downloading");
 
             string videoUrl = YoutubeLink.Text;
@@ -61,22 +62,41 @@ namespace YoutubeDownloader
             {
                 try
                 {
+                    // inicjacja youtubeclient
                     var youtube = new YoutubeClient();
-
+                    // pobieranie informacji o video
                     var video = await youtube.Videos.GetAsync(videoUrl);
-
+                    
                     string title = video.Title;
 
+                    // pobieranie dobrej ścieżki pliku 
                     outputPath = GetOutput(title, outputPath);
+                    UpdateProgressBar(progressBar.Value + 20);
+                  
 
-                    await youtube.Videos.DownloadAsync(
-                        videoUrl,
-                        outputPath,
-                        builder =>
-                        {
-                            builder.SetPreset(YoutubeExplode.Converter.ConversionPreset.UltraFast)
-                                   .SetFFmpegPath(ffmpegPath);
-                        });
+
+                    // Pobieranie manifestu
+                    var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
+                    UpdateProgressBar(progressBar.Value + 20);
+
+                    // wybieranie najlepszej jakosci video
+                    var streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
+                    UpdateProgressBar(progressBar.Value + 20);
+
+
+                    // pobieranie strumienia
+                    var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
+                    UpdateProgressBar(progressBar.Value + 20);
+
+
+                    // zapisywanie strumienia do pliku
+                    using (var outputStream = File.Create(outputPath))
+                    {
+                        await stream.CopyToAsync(outputStream);
+                    }
+                    UpdateProgressBar(progressBar.Value + 20);
+
+
 
                     MessageBox.Show("Pobieranie zakończone pomyślnie! ");
                 }
@@ -101,20 +121,45 @@ namespace YoutubeDownloader
 
                     var videos = await youtube.Playlists.GetVideosAsync(playlistUrl);
 
+
+
                     foreach (var video in videos)
                     {
+                        UpdateProgressBar(progressBar.Value + 20);
 
                         string title = video.Title;
 
                         outputPath = GetOutput(title, outputPath);
 
-                        await youtube.Videos.DownloadAsync(video.Url, outputPath, builder =>
+
+                        // Pobieranie manifestu
+                        var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
+                        UpdateProgressBar(progressBar.Value + 20);
+
+
+                        // wybieranie najlepszej jakosci video
+                        var streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
+                        UpdateProgressBar(progressBar.Value + 20);
+
+
+                        // pobieranie strumienia
+                        var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
+                        UpdateProgressBar(progressBar.Value + 20);
+
+
+                        // zapisywanie strumienia do pliku
+                        using (var outputStream = File.Create(outputPath))
                         {
-                            builder.SetPreset(YoutubeExplode.Converter.ConversionPreset.UltraFast)
-                                   .SetFFmpegPath(ffmpegPath);
-                        });
+                            await stream.CopyToAsync(outputStream);
+                        }
+                        UpdateProgressBar(progressBar.Value + 20);
+
+
 
                         outputPath = VideoLocalization.Text;
+
+                        UpdateProgressBar(0);
+
                     }
 
 
@@ -129,6 +174,12 @@ namespace YoutubeDownloader
             }
             
 
+        }
+
+        private void UpdateProgressBar(double newProgress)
+        {
+            progressBar.Value = newProgress;
+            PercentProgressBar.Text = $"{newProgress}%";
         }
 
         private string GetOutput(string title, string outputPath)
