@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="YoutubeDownloader.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:YoutubeDownloader"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#FF373737">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="450"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Content="About the program" Grid.Row="1" Grid.Column="3" Background="{x:Null}" Foreground="Red" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <TextBlock Grid.Row="3" Grid.Column="3" Foreground="#FFD82323"> 
+            The author of the application is Piotr Zarzycki, the application is completely 
+            <LineBreak/> free for personal use without any restrictions. <LineBreak/>
+<LineBreak/>
+            The program allows you to download videos and entire  playlists (set to public mode) <LineBreak/> to your device in .mp4 file format. <LineBreak/>
+<LineBreak/>
+            However, please note that the author is not responsible for any damages or <LineBreak/>consequences resulting from the use of the program. In particular, note that <LineBreak/> YouTube does not allow downloads from its platform directly, which may violate <LineBreak/> their terms of use. Use of this software is at the user's own risk and responsibility.
+<LineBreak/>
+<LineBreak/>
+            The full source code of YouTube Downloader is available at: <LineBreak/>https://github.com/xB0bon/YoutubeDownloader. <LineBreak/>
+<LineBreak/>
+YouTube Downloader v1.0.0
+        </TextBlock>
+
+        <Button Click="Homepage_Button" Content="Homepage" Grid.Row="5" Grid.Column="3" Width="100" Height="30" Background="#FFCE2B2B" BorderBrush="#FFA70000"></Button>
+    </Grid>
+</UserControl>
